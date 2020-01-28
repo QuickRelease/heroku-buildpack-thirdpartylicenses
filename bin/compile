@@ -17,6 +17,14 @@ fi
 
 cd $1
 
+DJANGO_SETTINGS_MODULE=$(<$3/DJANGO_SETTINGS_MODULE)
+
+echo "Found DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE"
+
 APP_NAME=$(expr match "$DJANGO_SETTINGS_MODULE" '\(\w\+\)\.\w\+')
 
+# Create Third Party License File
 python -m third_party_license_file_generator -r requirements.txt -p /app/.heroku/python/bin/python -g -c -o $1/$APP_NAME/static/THIRDPARTYLICENSES.txt
+
+# Recollect Static
+python manage.py collectstatic --noinput
