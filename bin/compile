@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+echo "-----> Found a requirements.txt file"
+
+
+if grep -q third_party_license_file_generator $1/requirements.txt; then
+  echo "SUCCESS: Found third_party_license_file_generator in requirements.txt." | indent
+else
+  echo "ERROR: third_party_license_file_generator not found in requirements.txt. Skipping." | indent
+  exit 0
+fi
+
+cd $1
+
+APP_NAME=$(expr match "$DJANGO_SETTINGS_MODULE" '\(\w\+\)\.\w\+')
+
+python -m third_party_license_file_generator -r requirements.txt -p /app/.heroku/python/bin/python -g -c -o $1/$APP_NAME/static/THIRDPARTYLICENSES.txt
