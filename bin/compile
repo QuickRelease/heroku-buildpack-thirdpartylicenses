@@ -48,6 +48,3 @@ echo "-----> Recollecting static files"
 
 python manage.py collectstatic --noinput --settings=$DJANGO_SETTINGS_MODULE | indent
 
-echo "-----> Fetching Version Number"
-
-git describe --tags --always >> $1/VERSION.txt
