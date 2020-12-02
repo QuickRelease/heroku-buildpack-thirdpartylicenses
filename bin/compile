@@ -8,7 +8,7 @@ indent() {
 echo "-----> Preparing for creation of Third Party License File"
 
 
-if grep -q third_party_license_file_generator $1/requirements.txt; then
+if grep -qE "third-party-license-file-generator|third_party_license_file_generator" $1/requirements.txt; then
   echo "Found third_party_license_file_generator in requirements.txt." | indent
 else
   echo "ERROR: third_party_license_file_generator not found in requirements.txt. Skipping." | indent
