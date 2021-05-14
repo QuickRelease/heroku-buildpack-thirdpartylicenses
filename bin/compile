@@ -7,11 +7,15 @@ indent() {
 
 echo "-----> Preparing for creation of Third Party License File"
 
-
-if grep -qE "third-party-license-file-generator|third_party_license_file_generator" $1/requirements.txt; then
-  echo "Found third_party_license_file_generator in requirements.txt." | indent
+# Check if third-party-license-file-generator is available in any requirements files
+# Note that in some cases the requirements.txt will include a `-r requirements/...` line which could install the package
+# For simplicity, if we find the package anywhere in a requirements file, we assume it has been installed
+# An improvement would be to check only the requirements.txt and any `-r ...` files referenced by it, but this is more complex
+# Another alternative would be to check the site-packages directory for the package
+if grep -qE "third-party-license-file-generator|third_party_license_file_generator" $1/requirements.txt $1/requirements/*; then
+  echo "Found third_party_license_file_generator in requirements." | indent
 else
-  echo "ERROR: third_party_license_file_generator not found in requirements.txt. Skipping." | indent
+  echo "ERROR: third_party_license_file_generator not found in requirements. Skipping." | indent
   exit 0
 fi
 
